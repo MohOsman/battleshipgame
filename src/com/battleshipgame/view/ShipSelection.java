@@ -12,6 +12,7 @@ import com.battleshipgame.model.ship.*;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 public class ShipSelection extends VBox {
@@ -20,11 +21,8 @@ public class ShipSelection extends VBox {
     private Ship selectedShip;
 
 
-
-
-
-    public ShipSelection(List<Ship> ships ,GameEventHandler mouseListener) {
-        this.mouseListener  =mouseListener;
+    public ShipSelection(List<Ship> ships, GameEventHandler mouseListener) {
+        this.mouseListener = mouseListener;
         addShipsquare(ships);
     }
 
@@ -34,58 +32,44 @@ public class ShipSelection extends VBox {
         VBox submarine = new VBox();
         VBox destroyer = new VBox();
         VBox cruser = new VBox();
-        for(Ship ship : ships){
+        for (Ship ship : ships) {
             switch (ship.getType()) {
                 case Carrier.SHIP_NAME:
                     carrier.getChildren().addAll(new Label(Carrier.SHIP_NAME), createShipSquare(Carrier.SHIP_SIZE));
                     carrier.setUserData(ship);
-                    carrier.setOnMouseClicked(mouseListener);
-                    setSelectedShips(carrier);
+                    carrier.setOnMouseClicked(event ->
+                           setSelectedShip(carrier.getUserData()));
                     break;
                 case BattleShip.SHIP_NAME:
                     battleship.getChildren().addAll(new Label(BattleShip.SHIP_NAME), createShipSquare(BattleShip.SHIP_SIZE));
                     battleship.setUserData(ship);
-                    battleship.setOnMouseClicked(mouseListener);
-                    setSelectedShips(battleship);
+                    battleship.setOnMouseClicked(event ->
+                            setSelectedShip(battleship.getUserData()));
                     break;
                 case Destroyer.SHIP_NAME:
                     destroyer.getChildren().addAll(new Label(Destroyer.SHIP_NAME), createShipSquare(Destroyer.SHIP_SIZE));
                     destroyer.setUserData(ship);
-                    destroyer.setOnMouseClicked(mouseListener);
-                    setSelectedShips(destroyer);
+                  destroyer.setOnMouseClicked(event ->
+                            setSelectedShip(destroyer.getUserData()));
                     break;
                 case Submarine.SHIP_NAME:
                     submarine.getChildren().addAll(new Label(Submarine.SHIP_NAME), createShipSquare(Submarine.SHIP_SIZE));
                     submarine.setUserData(ship);
-                    submarine.setOnMouseClicked(mouseListener);
-                    setSelectedShips(submarine);
+                    submarine.setOnMouseClicked(event ->
+                            setSelectedShip(submarine.getUserData()));
                     break;
                 case Cruiser.SHIP_NAME:
                     cruser.getChildren().addAll(new Label(Cruiser.SHIP_NAME), createShipSquare(Cruiser.SHIP_SIZE));
                     cruser.setUserData(ship);
-                    cruser.setOnMouseClicked(mouseListener);
-                    setSelectedShips(cruser);
+                    cruser.setOnMouseClicked(event ->
+                            setSelectedShip(cruser.getUserData()));
             }
 
-            }
+        }
 
         getChildren().addAll(carrier,battleship,cruser,submarine,destroyer);
 
-//        VBox battleShip = new VBox(new Label(BattleShip.SHIP_NAME), createShipSquare(BattleShip.SHIP_SIZE));
-//        VBox cruiser =new VBox(new Label(Cruiser.SHIP_NAME), createShipSquare(Cruiser.SHIP_SIZE));
-//        VBox submarine = new VBox(new Label(Submarine.SHIP_NAME), createShipSquare(Submarine.SHIP_SIZE));
-//        VBox destroyer =new VBox(new Label(Destroyer.SHIP_NAME),createShipSquare(Destroyer.SHIP_SIZE));
-//
-//        submarine.setOnMouseClicked(mouseListener);
-//        battleShip.setOnMouseClicked(mouseListener);
-//        destroyer.setOnMouseClicked(mouseListener);
-//        cruiser.setOnMouseClicked(mouseListener);
-
     }
-
-
-
-
 
 
 
@@ -95,8 +79,6 @@ public class ShipSelection extends VBox {
 
             Square square = new Square();
             square.setFill(Color.GREEN);
-            square.setOnMouseClicked(mouseListener);
-            square.setUserData(selectedShip);
             hBox.getChildren().addAll(square);
 
 
@@ -104,8 +86,9 @@ public class ShipSelection extends VBox {
         return hBox;
     }
 
-    private   void setSelectedShips(VBox vBox){
-        this.selectedShip= (Ship)vBox.getUserData();
+    private void setSelectedShip(Object ship) {
+        this.selectedShip = (Ship) ship;
+        System.out.println(selectedShip.getType());
 
     }
 
