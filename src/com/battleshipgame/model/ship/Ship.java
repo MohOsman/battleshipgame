@@ -1,7 +1,13 @@
 package com.battleshipgame.model.ship;
 
 
+import java.security.PublicKey;
+
 public abstract class Ship  {
+
+    public  static  final int SHIP_VERTICAL = 0;
+    public  static  final int SHIP_HORIZONTAL=1;
+
     private int size;
     private String type ;
     private int hit;

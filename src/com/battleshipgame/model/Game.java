@@ -12,15 +12,27 @@ import java.util.List;
 public class Game {
    private  List<Player>  players;
 
+
+
     public Game() {
         this.players = new ArrayList<>();
         createTestPlayers();
     }
 
-    private void createTestPlayers() {
-        Player player1 = new Player(PlayerType.USERPLAYER);
-        players.add(player1);
 
+
+    private void createTestPlayers() {
+       PlayerFactory playerFactory = new PlayerFactory();
+       this.players.add(playerFactory.createPlayer(PlayerType.AIPLAYER));
+      this.players.add(playerFactory.createPlayer(PlayerType.USERPLAYER));
+
+    }
+
+    public Player getAIPlayer (){
+        return this.players.get(0);
+    }
+    public Player  getUserPlayer(){
+        return this.players.get(1);
     }
 
 
@@ -31,4 +43,7 @@ public class Game {
     public List<Ship> getShips() {
         return players.get(0).getShips();
     }
+
+
+
 }

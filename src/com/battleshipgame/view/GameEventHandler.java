@@ -1,7 +1,6 @@
 package com.battleshipgame.view;
 
-import com.battleshipgame.model.Game;
-import com.battleshipgame.model.Position;
+import com.battleshipgame.model.*;
 import com.battleshipgame.model.ship.Ship;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -13,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.PlayerNotFoundExption;
 
 /**
  * Created by MohamedOsman on 2017-10-21.
@@ -21,9 +21,14 @@ public class GameEventHandler implements EventHandler<Event>{
      private  BattleShipGameStage stage;
      private  Game game;
      private Ship ship;
+     private Player userPlayer;
+     private Player AIPlayer ;
      private boolean shipselected = false;
+    private int shipDeriction;
+
     public GameEventHandler(BattleShipGameStage stage, Game game) {
-         this.stage = stage;
+         this.game = game;
+        this.stage = stage;
     }
 
 
@@ -31,33 +36,47 @@ public class GameEventHandler implements EventHandler<Event>{
 
     @Override
     public void handle(Event event) {
-        getShipSelected(event);
 
+        getShipSelected();
         if(shipselected){
-            PlaceShip(event);
+            PlaceShip((MouseEvent) event);
         }
-
-//        if(game.getPlayers().stream().anyMatch(e->e.getBattleGrid().isPostionValid(ship,position))){
-//            System.out.println("yes");
-//        } else
-//            System.out.println("No");
-//
-//    }
 
     }
 
-    private void PlaceShip(Event event) {
+
+    private void PlaceShip(MouseEvent event) {
         Square square = (Square) event.getSource();
         Position position = (Position) square.getUserData();
-        for(int i =0 ; i<ship.getSize(); i++ ){
-         position.setOccupied(true);
-            stage.getGameScene().getBattleGridView().uppdateSquare(position);
-        }
+
+    if(game.getUserPlayer().getBattleGrid().postionShipsOnGrid(ship,position,getShipdirection(event))){
+         stage.getGameScene().getBattleGridView().
+                 uppdateSquare(position.getXcord(),position.getYCord(),ship.getSize(),getShipdirection(event));
+  } else {
+        System.out.println("Postion is occupied");
     }
 
-    public  void getShipSelected(Event event) {
-        VBox vBox = (VBox) event.getSource();
+
+
+
+
+    }
+
+
+
+    private int getShipdirection(MouseEvent event) {
+        if(event.getButton()== MouseButton.PRIMARY)
+            shipDeriction = Ship.SHIP_HORIZONTAL;
+        else if(event.getButton() == MouseButton.SECONDARY)
+            shipDeriction = Ship.SHIP_VERTICAL;
+
+        return shipDeriction;
+    }
+
+
+    public  void getShipSelected() {
      ship = stage.getGameScene().getShipSelection().getSelectedShip();
+
 
         if(ship!= null){
             shipselected =true;
@@ -69,4 +88,11 @@ public class GameEventHandler implements EventHandler<Event>{
 
 
 
+    public Player getUserPlayer() {
+        return game.getUserPlayer();
+    }
+
+    public Player getAIPlayer() {
+        return game.getAIPlayer();
+    }
 }

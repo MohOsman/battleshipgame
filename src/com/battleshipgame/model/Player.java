@@ -10,12 +10,11 @@ import java.util.List;
 /**
  * Created by MohamedOsman on 2017-10-21.
  */
-public class Player {
+public  abstract class Player {
     private static int SHIPS_AMOUNT = 5;
 
 
     private PlayerType type;
-
     private List<Ship> ships;
     private BattleGrid battleGrid;
 
@@ -42,11 +41,6 @@ public class Player {
 
 
 
-    public void PlacedShips(){
-
-
-
-    }
 
 
     // hit
@@ -61,5 +55,7 @@ public class Player {
     }
 
 
-    public PlayerType getType;
+   public  PlayerType getType(){
+       return type;
+    }
 }

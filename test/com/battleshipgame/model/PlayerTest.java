@@ -13,7 +13,7 @@ public class PlayerTest {
     private  Player testplayer;
     @Before
     public void setUp() throws Exception {
-         testplayer = new Player(PlayerType.AIPLAYER);
+
 
     }
 

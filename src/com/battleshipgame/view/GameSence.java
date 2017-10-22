@@ -36,14 +36,14 @@ public class GameSence extends  BorderPane {
 
     private void initializeGrid(Game game, GameEventHandler mouseListenr) {
         for(Player player : game.getPlayers()){
-             battleGridView = new BattleGridView(mouseListenr);
-            if(player.getType == PlayerType.AIPLAYER )
+             battleGridView = new BattleGridView(game,mouseListenr);
+            if(player.getType() == PlayerType.AIPLAYER )
               battleGridView.CanPlaceShips(false);
             battleGridViews.add(battleGridView);
 
 
         }
-        HBox hBox = new HBox(50, battleGridViews.get(0));
+        HBox hBox = new HBox(50, battleGridViews.get(1));
         hBox.setAlignment(Pos.CENTER);
         setCenter(hBox);
     }
