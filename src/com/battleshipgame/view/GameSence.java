@@ -43,7 +43,7 @@ public class GameSence extends  BorderPane {
 
 
         }
-        HBox hBox = new HBox(50, battleGridViews.get(1));
+        HBox hBox = new HBox(50, battleGridViews.get(0), battleGridViews.get(1));
         hBox.setAlignment(Pos.CENTER);
         setCenter(hBox);
     }

@@ -12,12 +12,16 @@ public class Position {
 
 
     public Position(int xCord, int yCord) {
-        this.xCord = xCord;
+        this.xCord =xCord;
         this.yCord = yCord;
+//        setYCord(yCord);
+//        setXCord(xCord);
     }
 
 
     public void setXCord(int xCord) {
+        if(xCord<0|| xCord> 9 )
+            throw new NumberFormatException();
         this.xCord = xCord;
     }
 
@@ -30,10 +34,17 @@ public class Position {
     }
 
 
-    public void setYCord(int yCord) {
+   public void setYCord(int yCord) {
+        if(yCord<0|| yCord> 9 )
+            throw new NumberFormatException();
+
         this.yCord = yCord;
 
     }
+
+
+
+
 
     @Override
     public String toString() {

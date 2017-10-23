@@ -1,7 +1,12 @@
 package com.battleshipgame.model.ship;
 
 
+import com.battleshipgame.model.Position;
+
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Ship  {
 
@@ -12,8 +17,10 @@ public abstract class Ship  {
     private String type ;
     private int hit;
     private boolean sunk;
+    private List<Position> shipPostions;
 
     public Ship(String type, int size) {
+        this.shipPostions = new LinkedList<>();
         this.type = type;
         this.size = size;
     }
@@ -48,5 +55,15 @@ public abstract class Ship  {
 
     public void setSunk(boolean sunk) {
         this.sunk = sunk;
+    }
+
+
+    public void setPostions(List<Position> position) {
+        for (Position pos : position){
+            shipPostions.add(pos);
+        }
+
+
+
     }
 }

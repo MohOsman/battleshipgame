@@ -2,6 +2,7 @@ package com.battleshipgame.view;
 
 
 import com.sun.tools.example.debug.expr.ExpressionParser;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -19,10 +20,15 @@ public class ShipSelection extends VBox {
 
     private GameEventHandler mouseListener;
     private Ship selectedShip;
+    private List<Ship> selectedShips;
+    private boolean isSelected;
 
 
     public ShipSelection(List<Ship> ships, GameEventHandler mouseListener) {
         this.mouseListener = mouseListener;
+        this.selectedShips = new ArrayList<>();
+        this.isSelected = false;
+
         addShipsquare(ships);
     }
 
@@ -37,20 +43,23 @@ public class ShipSelection extends VBox {
                 case Carrier.SHIP_NAME:
                     carrier.getChildren().addAll(new Label(Carrier.SHIP_NAME), createShipSquare(Carrier.SHIP_SIZE));
                     carrier.setUserData(ship);
-                    carrier.setOnMouseClicked(event ->
-                           setSelectedShip(carrier.getUserData()));
+                    carrier.setOnMouseClicked(event -> setSelectedShip(carrier.getUserData()));
                     break;
                 case BattleShip.SHIP_NAME:
                     battleship.getChildren().addAll(new Label(BattleShip.SHIP_NAME), createShipSquare(BattleShip.SHIP_SIZE));
                     battleship.setUserData(ship);
                     battleship.setOnMouseClicked(event ->
                             setSelectedShip(battleship.getUserData()));
+
+
                     break;
                 case Destroyer.SHIP_NAME:
                     destroyer.getChildren().addAll(new Label(Destroyer.SHIP_NAME), createShipSquare(Destroyer.SHIP_SIZE));
                     destroyer.setUserData(ship);
-                  destroyer.setOnMouseClicked(event ->
+                    destroyer.setOnMouseClicked(event ->
                             setSelectedShip(destroyer.getUserData()));
+
+
                     break;
                 case Submarine.SHIP_NAME:
                     submarine.getChildren().addAll(new Label(Submarine.SHIP_NAME), createShipSquare(Submarine.SHIP_SIZE));
@@ -65,12 +74,17 @@ public class ShipSelection extends VBox {
                             setSelectedShip(cruser.getUserData()));
             }
 
+
         }
 
-        getChildren().addAll(carrier,battleship,cruser,submarine,destroyer);
+
+
+
+        getChildren().addAll(carrier, battleship, cruser, submarine, destroyer);
+        if (isSelected)
+            carrier.setVisible(false);
 
     }
-
 
 
     private HBox createShipSquare(int size) {
@@ -88,11 +102,28 @@ public class ShipSelection extends VBox {
 
     private void setSelectedShip(Object ship) {
         this.selectedShip = (Ship) ship;
-        System.out.println(selectedShip.getType());
+        isSelected = true;
+
 
     }
 
     public Ship getSelectedShip() {
         return selectedShip;
     }
+
+    public void Update(Ship ship) {
+        if(ship!= null){
+        for (int i =0; i< getChildren().size(); i++){
+            VBox vBox =  (VBox)getChildren().get(i);
+             if(vBox.getUserData().equals(ship)){
+                 vBox.setVisible(false);
+                 setSelectedShip(null);
+             }
+
+        }
+
+          }
+
+        }
+
 }

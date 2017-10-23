@@ -1,11 +1,9 @@
 package com.battleshipgame.model;
 
-import com.battleshipgame.*;
+
 import com.battleshipgame.model.ship.Ship;
-import com.battleshipgame.view.Square;
-import javafx.geometry.Point2D;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.geometry.Pos;
-import javafx.scene.paint.Color;
 
 
 import java.util.ArrayList;
@@ -18,14 +16,25 @@ public class BattleGrid {
     // Position Ships recvied from player in the recivced postion, checke if the postion is not occpiuied by
     // other ship
 
-    public List<Position> postions;
+    private List<Position> gridPositions;
+    private List<Position> occupiedPositions;
+    private Status status;
     private static final int GRID_Y = 10;
     private static final int GRID_X = 10;
-    private static Position p;
+
+    public enum Status {
+        PLACEBLE,
+        RISKCOLLISON,
+        ENDPOINT
+
+    }
+
 
     public BattleGrid() {
         // list the keeps track of postions
-        this.postions = new ArrayList<>();
+        this.gridPositions = new ArrayList<>();
+        this.occupiedPositions = new ArrayList<>();
+
 
         createBattleField();
 
@@ -35,66 +44,110 @@ public class BattleGrid {
         for (int y = 0; y < GRID_Y; y++) {
             for (int x = 0; x < GRID_X; x++) {
                 Position position = new Position(x, y);
-                this.postions.add(position);
+                this.gridPositions.add(position);
             }
         }
 
     }
 
-    public Boolean postionShipsOnGrid(Ship ship, Position position, int direction) {
 
+    public boolean postionShipsOnGrid(Ship ship, Position position, int direction) {
+        if (postionIsavailable(ship, position, direction)) {
+            placeShip(ship, position, direction);
+            return true;
+        } else
+            return false;
+
+    }
+
+    private void placeShip(Ship ship, Position position, int direction) {
         switch (direction) {
-            case Ship.SHIP_VERTICAL:
-
-                for (int i = position.getYCord(); i < position.getYCord() + ship.getSize(); i++) {
-                    Position p = getPostion(position.getXcord(), i);
-                    if (isPostionValid(ship, p, Ship.SHIP_VERTICAL)) {
-                        position.setOccupied(true);
-                        this.postions.set(this.postions.indexOf(p), p);
-                        System.out.println(p);
-                        return true;
-                    }
-                }
-                break;
             case Ship.SHIP_HORIZONTAL:
                 for (int i = position.getXcord(); i < position.getXcord() + ship.getSize(); i++) {
-                    Position p = getPostion(i, position.getYCord());
-                    if (isPostionValid(ship, p, Ship.SHIP_HORIZONTAL)) {
-                        p.setOccupied(true);
-                        this.postions.set(this.postions.indexOf(p), p);
-
-                        System.out.println(p);
-                        return true;
-                    }
+                    Position p = getPostion(i,position.getYCord());
+                    p.setOccupied(true);
+                    this.occupiedPositions.add(p);
                 }
                 break;
-
+            case Ship.SHIP_VERTICAL:
+                for (int i = position.getYCord(); i < position.getYCord() + ship.getSize(); i++) {
+                    Position p = getPostion(position.getXcord(), i);
+                    p.setOccupied(true);
+                    this.occupiedPositions.add(p);
+                }
+                break;
 
         }
 
+    }
 
+    private boolean postionIsavailable(Ship ship, Position position, int direction) {
+
+        switch (direction) {
+            case Ship.SHIP_HORIZONTAL:
+                for (int i = position.getXcord(); i < position.getXcord() + ship.getSize(); i++) {
+                    Position p = getPostion(i, position.getYCord());
+
+                    if (ValidatePosition(p)) return false;
+                }
+                break;
+            case Ship.SHIP_VERTICAL:
+                for (int i = position.getYCord(); i < position.getYCord() + ship.getSize(); i++) {
+                    Position p = getPostion(position.getXcord(),i);
+
+
+                    if (ValidatePosition(p)) return false;
+                }
+                break;
+        }
+
+        status= Status.PLACEBLE;
+
+        return true;
+    }
+
+    private boolean ValidatePosition(Position p) {
+        if (!insideTheGrid(p)) {
+            this.status= Status.ENDPOINT;
+            return true;
+        }
+        if (postionsOccuppiedContians(p)) {
+
+            return true;
+        }
+        if (hasOverLap(p)) {
+            status = Status.RISKCOLLISON;
+            return true;
+        }
         return false;
+    }
 
-
+    private boolean postionsOccuppiedContians(Position p) {
+        for (Position position : occupiedPositions) {
+            if (p.getXcord() == position.getXcord() && p.getYCord() == position.getYCord())
+                return true;
+        }
+        return false;
     }
 
 
     private Position getPostion(int x, int y) {
-        int posX = 0;
-        int posY = 0;
-        for (Position p : postions) {
+        int posX = -1;
+        int posY = -1;
+        for (Position p : gridPositions) {
             if (p.getXcord() == x && p.getYCord() == y) {
                 posX = p.getXcord();
                 posY = p.getYCord();
-            }
 
+            }
         }
+
         return new Position(posX, posY);
     }
 
-    private Position getPostion(Position position) {
+    public Position getPostion(Position position) {
         Position returnPostion = null;
-        for (Position p : postions) {
+        for (Position p : gridPositions) {
             if (p.getXcord() == position.getXcord() && p.getYCord() == position.getYCord()) {
                 returnPostion = p;
             }
@@ -103,37 +156,45 @@ public class BattleGrid {
     }
 
 
-    public boolean isPostionValid(Ship ship, Position position, int direction) {
-        if (!position.isOccupied()) {
-            return true;
-
-        }
-
-        return false;
-
-    }
-
     // to Implment tomworow
-    private boolean hasOverLap(Position position, Ship ship, int direction) {
+    private boolean hasOverLap(Position position) {
+        for (Position pos : getNeighbors(position)) {
+            if (insideTheGrid(pos) && postionsOccuppiedContians(pos))
+                return true;
+        }
 
         return false;
 
     }
 
-    private boolean insideTheGrid(Position position, Ship ship, int direction) {
-        if (direction == Ship.SHIP_VERTICAL) {
-            return position.getYCord() >= 0 && position.getYCord() + ship.getSize() <= GRID_Y;
+    private List<Position> getNeighbors(Position position) {
+        List<Position> neigborList = new ArrayList<>();
+        neigborList.add(new Position(position.getXcord() + 1, position.getYCord()));
+        neigborList.add(new Position(position.getXcord() - 1, position.getYCord()));
+        neigborList.add(new Position(position.getXcord(), position.getYCord() + 1));
+        neigborList.add(new Position(position.getXcord(), position.getYCord() - 1));
 
-        } else {
-            return position.getXcord() >= 0 && position.getXcord() + ship.getSize() <= GRID_X;
+        return neigborList;
+    }
 
-        }
+    private boolean insideTheGrid(Position position) {
+        return position.getXcord() >= 0 && position.getXcord() <= 9 && position.getYCord() >= 0 && position.getYCord() <= 9;
 
     }
+
 
     public List<Position> getPostions() {
-        return postions;
+        return gridPositions;
     }
+
+    public List<Position> getOccupiedPositions() {
+        return occupiedPositions;
+    }
+
+    public Status getStatus() {
+        return this.status;
+    }
+
 
 
 }

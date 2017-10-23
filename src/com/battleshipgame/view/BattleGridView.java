@@ -3,12 +3,15 @@ package com.battleshipgame.view;
 
 import com.battleshipgame.model.ship.Ship;
 import com.sun.org.apache.xerces.internal.xni.grammars.Grammar;
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import com.battleshipgame.model.*;
 import javafx.scene.paint.Color;
 
+import java.util.List;
 
 
 public class BattleGridView extends GridPane {
@@ -33,37 +36,50 @@ public class BattleGridView extends GridPane {
 
     private void initializeGrid() {
 
-        for(Position p : game.getUserPlayer().getBattleGrid().getPostions()){
+        for(Player player :game.getPlayers()) {
+            for (Position p : player.getBattleGrid().getPostions()) {
 
-           square= new Square(p.getXcord(),p.getYCord());
-            setRowIndex(square,p.getYCord());
-            square.setOnMouseClicked(getListener());
-            square.setUserData(p);
-            setColumnIndex(square,p.getXcord());
-            getChildren().addAll(square);
+                square = new Square(p.getXcord(), p.getYCord());
+                setRowIndex(square, p.getYCord());
+                square.setOnMouseClicked(getListener());
+                square.setUserData(p);
+                setColumnIndex(square, p.getXcord());
+                getChildren().addAll(square);
+                if (!CanPlaceShips) {
+                    square.setFill(Color.GRAY);
+                    square.setDisable(true);
+
+                }
+
+            }
         }
 
     }
 
-  public void uppdateSquare(int xCord, int ycord, int shipLenght, int derection ){
+  public void uppdateSquare(Position pos, int shipLenght, int derection ){
       switch (derection) {
           case Ship.SHIP_VERTICAL:
-              for (int i = ycord; i < ycord + shipLenght; i++) {
-                  Square square = getSquare(xCord, i);
+              for (int i = pos.getYCord(); i < pos.getYCord() + shipLenght; i++) {
+                  Square square = getSquare(pos.getXcord(), i);
                   square.setFill(Color.LIGHTBLUE);
+
+
 
               }
                   break;
           case  Ship.SHIP_HORIZONTAL:
-                  for (int i =xCord; i < xCord + shipLenght; i++) {
-                      Square square = getSquare(i,ycord);
+                  for (int i =pos.getXcord(); i < pos.getXcord() + shipLenght; i++) {
+                      Square square = getSquare(i,pos.getYCord());
                       square.setFill(Color.GREEN);
+
+
 
                   }
                   break;
 
       }
     }
+
 
     private Square getSquare(int xCord, int ycord){
       return (Square)getChildren().get(ycord*10+xCord);
@@ -78,6 +94,9 @@ public class BattleGridView extends GridPane {
         this.CanPlaceShips = CanPlaceShips;
 
     }
+
+
+
 }
 
 
