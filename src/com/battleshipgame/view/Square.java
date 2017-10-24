@@ -7,8 +7,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Square extends  Rectangle {
 
-    private static  final Color OCCUPIED_COLOR  = Color.GRAY;
-    private static  final Color OCCUPIED_STROKE = Color.AQUA;
     private static final Color SQUARE_COLOR = Color.BLUE;
     private static final Color SQUARE_STROKE = Color.WHITE;
 
@@ -18,8 +16,7 @@ public class Square extends  Rectangle {
 
     private  int xPostison ;
     private int yPosttion ;
-    private boolean Occupied;
-    private boolean clicked;
+
 
 
     public Square(int xPostison, int yPosttion) {
@@ -41,17 +38,6 @@ public class Square extends  Rectangle {
 
 
 
-    public boolean isOccupied() {
-        return Occupied;
-    }
-
-    public int getxPostison() {
-        return xPostison;
-    }
-
-    public int getyPosttion() {
-        return yPosttion;
-    }
 
 
 

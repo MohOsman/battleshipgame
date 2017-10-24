@@ -12,7 +12,7 @@ public class PlayerFactory {
             case USERPLAYER:
                 return createUserPlayer();
 
-                default:return null;
+            default:return null;
 
         }
     }

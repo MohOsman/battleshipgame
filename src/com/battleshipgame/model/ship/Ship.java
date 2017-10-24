@@ -18,6 +18,7 @@ public abstract class Ship  {
     private int hit;
     private boolean sunk;
     private List<Position> shipPostions;
+    private int direction;
 
     public Ship(String type, int size) {
         this.shipPostions = new LinkedList<>();
@@ -58,6 +59,10 @@ public abstract class Ship  {
     }
 
 
+    public List<Position> getShipPostions() {
+        return shipPostions;
+    }
+
     public void setPostions(List<Position> position) {
         for (Position pos : position){
             shipPostions.add(pos);
@@ -65,5 +70,15 @@ public abstract class Ship  {
 
 
 
+
+
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public int getDirection() {
+        return direction;
     }
 }

@@ -10,79 +10,59 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import com.battleshipgame.model.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
 
 public class BattleGridView extends GridPane {
-
-    private BattleGrid battleGrid;
-    private boolean CanPlaceShips ;
-    private Game game;
     private GameEventHandler mouseListener;
-    private Square square;
-
-
-    public BattleGridView(Game game ,GameEventHandler mouseListener) {
+    private Square[][] squares;
+    public BattleGridView(GameEventHandler mouseListener) {
         this.mouseListener = mouseListener;
-        this.game = game;
+        this.squares = new Square[10][10];
+
         initializeGrid();
-
-
 
     }
 
-
-
     private void initializeGrid() {
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
 
-        for(Player player :game.getPlayers()) {
-            for (Position p : player.getBattleGrid().getPostions()) {
-
-                square = new Square(p.getXcord(), p.getYCord());
-                setRowIndex(square, p.getYCord());
-                square.setOnMouseClicked(getListener());
-                square.setUserData(p);
-                setColumnIndex(square, p.getXcord());
-                getChildren().addAll(square);
-                if (!CanPlaceShips) {
-                    square.setFill(Color.GRAY);
-                    square.setDisable(true);
-
-                }
-
+                squares[y][x] = new Square(y, x);
+                squares[y][x].setOnMouseClicked(getListener());
+                squares[y][x].setUserData(new Position(x, y));
+                setRowIndex(squares[y][x], y);
+                setColumnIndex(squares[y][x], x);
+                getChildren().addAll(squares[y][x]);
             }
         }
 
     }
 
-  public void uppdateSquare(Position pos, int shipLenght, int derection ){
-      switch (derection) {
-          case Ship.SHIP_VERTICAL:
-              for (int i = pos.getYCord(); i < pos.getYCord() + shipLenght; i++) {
-                  Square square = getSquare(pos.getXcord(), i);
-                  square.setFill(Color.LIGHTBLUE);
 
+    public void uppdateSquare(Position pos, int shipLenght, int derection) {
+        switch (derection) {
+            case Ship.SHIP_VERTICAL:
+                for (int i = pos.getYCord(); i < pos.getYCord() + shipLenght; i++) {
+                    Square square = getSquare(pos.getXcord(), i);
+                    square.setFill(Color.LIGHTBLUE);
+                }
+                break;
+            case Ship.SHIP_HORIZONTAL:
+                for (int i = pos.getXcord(); i < pos.getXcord() + shipLenght; i++) {
+                    Square square = getSquare(i, pos.getYCord());
+                    square.setFill(Color.GREEN);
+                }
+                break;
 
-
-              }
-                  break;
-          case  Ship.SHIP_HORIZONTAL:
-                  for (int i =pos.getXcord(); i < pos.getXcord() + shipLenght; i++) {
-                      Square square = getSquare(i,pos.getYCord());
-                      square.setFill(Color.GREEN);
-
-
-
-                  }
-                  break;
-
-      }
+        }
     }
 
 
-    private Square getSquare(int xCord, int ycord){
-      return (Square)getChildren().get(ycord*10+xCord);
+    private Square getSquare(int xCord, int ycord) {
+        return (Square) getChildren().get(ycord * 10 + xCord);
     }
 
 
@@ -90,13 +70,27 @@ public class BattleGridView extends GridPane {
         return this.mouseListener;
     }
 
-    public void CanPlaceShips(Boolean CanPlaceship) {
-        this.CanPlaceShips = CanPlaceShips;
 
+    public void disableGrid() {
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                squares[y][x].setFill(Color.LIGHTGRAY);
+                squares[y][x].setDisable(true);
+
+
+            }
+        }
     }
 
+    public void enableGrid() {
+        for (int y = 0; y < 10; y++) {
+            for (int x = 0; x < 10; x++) {
+                squares[y][x].setFill(Color.BLUE);
 
 
+            }
+        }
+    }
 }
 
 

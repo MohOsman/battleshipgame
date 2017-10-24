@@ -90,7 +90,6 @@ public class ShipSelection extends VBox {
     private HBox createShipSquare(int size) {
         HBox hBox = new HBox();
         for (int i = 0; i < size; i++) {
-
             Square square = new Square();
             square.setFill(Color.GREEN);
             hBox.getChildren().addAll(square);

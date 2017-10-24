@@ -26,8 +26,7 @@ public class BattleShipGameStage extends Stage {
 
     }
 
-
-
+    // eventlullet resna här
 
 
 

@@ -5,6 +5,8 @@ import com.battleshipgame.model.ship.Ship;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -14,6 +16,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.PlayerNotFoundExption;
 
+import java.awt.*;
+
 /**
  * Created by MohamedOsman on 2017-10-21.
  */
@@ -21,39 +25,105 @@ public class GameEventHandler implements EventHandler<Event> {
     private BattleShipGameStage stage;
     private Game game;
     private Ship ship;
-    private Player userPlayer;
-    private Player AIPlayer;
-    private boolean shipselected = false;
     private int shipDeriction;
 
     public GameEventHandler(BattleShipGameStage stage, Game game) {
         this.game = game;
         this.stage = stage;
+
     }
 
 
     @Override
     public void handle(Event event) {
-
-        getShipSelected();
-        if (shipselected) {
-            PlaceShip((MouseEvent) event);
+        switch (game.getState()) {
+            case SETUPMODE:
+                placeShip((MouseEvent) event, getUserPlayer());
+                System.out.println(" in setupmode");
+                placeShip((MouseEvent) event, getAIPlayer());
+                checkAndSetState();
+                System.out.println(game.getState());
+                break;
+            case PLAYMODE:
+                startGame(event );
+                break;
         }
+
 
     }
 
 
-    private void PlaceShip(MouseEvent event) {
-        Square square = (Square) event.getSource();
-        Position position = (Position) square.getUserData();
-        if (game.getUserPlayer().getBattleGrid().postionShipsOnGrid(ship, position, getShipdirection(event))) {
-            stage.getGameScene().getBattleGridView().uppdateSquare(position, ship.getSize(), getShipdirection(event));
-            stage.getGameScene().getShipSelection().Update(ship);
-            setShip(null);
+    // Implement tomwowe
+
+    private void startGame(Event event) {
+
+
+
+
+
+
+
+    }
+
+    private void checkAndSetState() {
+        if(getAIPlayer().allShipsPlaced() && getUserPlayer().allShipsPlaced()){
+            game.setState(State.PLAYMODE);
+        }
+        else {
+            game.setState(State.SETUPMODE);
+        }
+    }
+
+
+    private void placeShip(MouseEvent event, Player player) {
+
+        switch (player.getType()) {
+            case USERPLAYER:
+                userPlaceShip(event);
+                break;
+            case AIPLAYER:
+                AIPlaceShip();
+                break;
 
 
         }
-        System.out.println("X " + getUserPlayer().getBattleGrid().getPostion(position).getXcord() + "Y " + getUserPlayer().getBattleGrid().getPostion(position).getYCord());
+
+
+    }
+
+    private void AIPlaceShip() {
+        stage.getGameScene().getAIPlayerBattleGridview().enableGrid();
+        System.out.println(" in AIMODE");
+        if (!getAIPlayer().allShipsPlaced()) {
+            getAIPlayer().placeShip();
+
+        }
+        else {
+            System.out.println("ALL AI ships are placed ");
+        }
+
+
+    }
+
+
+    private void userPlaceShip(MouseEvent event) {
+        Square square = (Square) event.getSource();
+        Position position = (Position) square.getUserData();
+        if (getShipSelected() != null) {
+            if (!getUserPlayer().allShipsPlaced()) {
+                if (getUserPlayer().placeShip(getShipSelected(), position, getShipdirection(event))) {
+                    stage.getGameScene().getUserBattleGridView().
+                            uppdateSquare(position, getShipSelected().
+                                    getSize(), getShipdirection(event));
+                    stage.getGameScene().getShipSelection().Update(getShipSelected());
+
+
+                }
+
+
+            }
+
+        }
 
     }
 
@@ -68,21 +138,11 @@ public class GameEventHandler implements EventHandler<Event> {
     }
 
 
-    public void getShipSelected() {
-        ship = stage.getGameScene().getShipSelection().getSelectedShip();
-
-
-        if (ship != null) {
-            shipselected = true;
-        } else shipselected = false;
-
+    public Ship getShipSelected() {
+        return ship = stage.getGameScene().getShipSelection().getSelectedShip();
 
     }
 
-    public void setShip(Ship ship)
-     {
-        this.ship = ship;
-    }
 
     public Player getUserPlayer() {
         return game.getUserPlayer();
