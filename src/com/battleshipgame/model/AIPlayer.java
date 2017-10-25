@@ -45,8 +45,16 @@ public class AIPlayer extends Player {
 
     }
 
+    @Override
+    public Boolean hit(Position position) {
+        return null;
+    }
 
 
+    @Override
+    public boolean attack(Position position, BattleGrid battleGrid) {
+        return false;
+    }
 
 
 }

@@ -1,7 +1,6 @@
 package com.battleshipgame.view;
 
 import com.battleshipgame.model.Game;
-import com.battleshipgame.model.State;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,7 +8,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,26 +17,26 @@ import java.util.List;
  */
 public class GameSence extends  BorderPane {
 
-   private List<BattleGridView> battleGridViews;
+
    private BattleGridView userBattleGridView;
    private BattleGridView AIPlayerBattleGridview;
    private ShipSelection shipSelection;
    private  Button startButton;
 
     public GameSence() {
-       this.battleGridViews = new ArrayList<>();
+
     }
 
 
-    public  void  createGameWindow(Game game , GameEventHandler gameEventHandler) {
-        initializeGrid(game, gameEventHandler);
-        createSelectionShips(game,gameEventHandler);
-        createStartButton(gameEventHandler);
+    public  void  createGameWindow(Game game , GameEventListener gameEventListener) {
+        initializeGrid(game, gameEventListener);
+        createSelectionShips(game, gameEventListener);
+        createStartButton(gameEventListener);
         hideElements();
 
         }
 
-    private void initializeGrid(Game game, GameEventHandler mouseListenr) {
+    private void initializeGrid(Game game, GameEventListener mouseListenr) {
         this.userBattleGridView = new BattleGridView(mouseListenr);
         this.AIPlayerBattleGridview = new BattleGridView(mouseListenr);
         HBox hBox = new HBox(50, AIPlayerBattleGridview, userBattleGridView );
@@ -49,20 +47,20 @@ public class GameSence extends  BorderPane {
 
 
 
-    public void createSelectionShips(Game game, GameEventHandler mouseListener){
+    public void createSelectionShips(Game game, GameEventListener mouseListener){
      shipSelection = new ShipSelection(game.getPlayerShips(),mouseListener);
         setMargin(shipSelection,new Insets(50,50,10,0));
         setRight(shipSelection);
 
     }
 
-    public  void createStartButton(GameEventHandler gameEventHandler){
+    public  void createStartButton(GameEventListener gameEventListener){
 
         startButton = new Button("Start");
         startButton.setPrefSize(60,30);
         startButton.setOnAction(event -> {
            showElements();
-           getAIPlayerBattleGridview().disableGrid();
+         getAIPlayerBattleGridview().disableGrid();
            hideButton();
 
         });

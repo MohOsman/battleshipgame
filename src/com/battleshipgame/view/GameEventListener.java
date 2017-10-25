@@ -2,32 +2,21 @@ package com.battleshipgame.view;
 
 import com.battleshipgame.model.*;
 import com.battleshipgame.model.ship.Ship;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import model.PlayerNotFoundExption;
-
-import java.awt.*;
 
 /**
  * Created by MohamedOsman on 2017-10-21.
  */
-public class GameEventHandler implements EventHandler<Event> {
+public class GameEventListener implements EventHandler<Event> {
     private BattleShipGameStage stage;
     private Game game;
     private Ship ship;
     private int shipDeriction;
 
-    public GameEventHandler(BattleShipGameStage stage, Game game) {
+    public GameEventListener(BattleShipGameStage stage, Game game) {
         this.game = game;
         this.stage = stage;
 
@@ -42,10 +31,12 @@ public class GameEventHandler implements EventHandler<Event> {
                 System.out.println(" in setupmode");
                 placeShip((MouseEvent) event, getAIPlayer());
                 checkAndSetState();
+
                 System.out.println(game.getState());
                 break;
             case PLAYMODE:
-                startGame(event );
+                game.startGame();
+                startGame(event);
                 break;
         }
 
@@ -56,20 +47,35 @@ public class GameEventHandler implements EventHandler<Event> {
     // Implement tomwowe
 
     private void startGame(Event event) {
+        AttackMode(event);
 
+    }
 
+    private void AttackMode(Event event) {
+        Square square = (Square) event.getSource();
+        Position position = (Position) square.getUserData();
+        boolean ishit = game.userAttack(position);
 
+            game.updateGrid(getUserPlayer());
 
 
 
 
     }
 
+    private void starGameSetup() {
+        System.out.println("ENTER SETUP IT SHOULDENT");
+        stage.getGameScene().getUserBattleGridView().disableGrid();
+        stage.getGameScene().getAIPlayerBattleGridview().enableGrid();
+
+
+
+    }
+
     private void checkAndSetState() {
-        if(getAIPlayer().allShipsPlaced() && getUserPlayer().allShipsPlaced()){
+        if (getAIPlayer().allShipsPlaced() && getUserPlayer().allShipsPlaced()) {
             game.setState(State.PLAYMODE);
-        }
-        else {
+        } else {
             game.setState(State.SETUPMODE);
         }
     }
@@ -92,13 +98,11 @@ public class GameEventHandler implements EventHandler<Event> {
     }
 
     private void AIPlaceShip() {
-        stage.getGameScene().getAIPlayerBattleGridview().enableGrid();
         System.out.println(" in AIMODE");
         if (!getAIPlayer().allShipsPlaced()) {
             getAIPlayer().placeShip();
 
-        }
-        else {
+        } else {
             System.out.println("ALL AI ships are placed ");
         }
 
@@ -115,7 +119,7 @@ public class GameEventHandler implements EventHandler<Event> {
                     stage.getGameScene().getUserBattleGridView().
                             uppdateSquare(position, getShipSelected().
                                     getSize(), getShipdirection(event));
-                    stage.getGameScene().getShipSelection().Update(getShipSelected());
+                    stage.getGameScene().getShipSelection().remove(getShipSelected());
 
 
                 }

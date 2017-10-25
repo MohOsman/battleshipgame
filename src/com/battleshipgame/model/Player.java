@@ -2,7 +2,6 @@ package com.battleshipgame.model;
 
 
 import com.battleshipgame.model.ship.*;
-import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,4 +83,8 @@ public  abstract class Player {
 
 
     }
+
+    public abstract Boolean hit(Position position);
+
+    public abstract boolean attack(Position position, BattleGrid battleGrid);
 }

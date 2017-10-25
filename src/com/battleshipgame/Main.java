@@ -12,10 +12,11 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Game game = new Game();
         BattleShipGameStage  gameView = new BattleShipGameStage(stage);
-        GameEventHandler mouseListener = new GameEventHandler(gameView,game);
-        GameController gameController = new GameController();
-
-        gameController.playGame(game,gameView,mouseListener);
+        GameEventListener gameEventListener = new GameEventListener(gameView,game);
+        GameController gameController = new GameController(game,gameView,gameEventListener);
+        gameView.setGameController(gameController);
+        game.addObserver(gameView);
+        gameController.playGame(game,gameView,gameEventListener);
 
     }
 

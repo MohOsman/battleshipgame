@@ -2,23 +2,21 @@ package com.battleshipgame.view;
 
 
 import com.battleshipgame.model.ship.Ship;
-import com.sun.org.apache.xerces.internal.xni.grammars.Grammar;
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import com.battleshipgame.model.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 import java.util.List;
 
 
-public class BattleGridView extends GridPane {
-    private GameEventHandler mouseListener;
+
+public class BattleGridView extends GridPane{
+    private GameEventListener mouseListener;
     private Square[][] squares;
-    public BattleGridView(GameEventHandler mouseListener) {
+
+    public BattleGridView(GameEventListener mouseListener)  {
         this.mouseListener = mouseListener;
         this.squares = new Square[10][10];
 
@@ -76,22 +74,48 @@ public class BattleGridView extends GridPane {
             for (int x = 0; x < 10; x++) {
                 squares[y][x].setFill(Color.LIGHTGRAY);
                 squares[y][x].setDisable(true);
-
-
             }
         }
     }
+
 
     public void enableGrid() {
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
                 squares[y][x].setFill(Color.BLUE);
-
-
+                squares[y][x].setDisable(false);
             }
         }
     }
+
+    /// test delete latter !
+
+    public void showShips(List<Position> positions) {
+        for (Position p : positions) {
+            Square square = getSquare(p.getXcord(), p.getYCord());
+            square.setFill(Color.RED);
+        }
+    }
+
+    public void uppdateSingelSquare(Position position) {
+         if(position != null){
+        Square square = getSquare(position.getXcord(), position.getYCord());
+            if (position.isHit()) {
+                square.setFill(Color.RED);
+            } else
+                square.setFill(Color.BLACK);
+        }
+
+        System.out.println("postion is null ");
 }
+
+
+
+}
+
+
+
+
 
 
 

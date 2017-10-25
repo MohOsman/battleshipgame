@@ -1,7 +1,5 @@
 package com.battleshipgame.model;
 
-import com.battleshipgame.model.Player;
-import com.battleshipgame.model.PlayerType;
 import com.battleshipgame.model.ship.Ship;
 
 
@@ -32,4 +30,24 @@ public class UserPlayer extends Player {
     public void placeShip() {
         // not used
     }
+
+    @Override
+    public Boolean hit(Position position) {
+        return null;
+    }
+
+    @Override
+    public boolean attack(Position position, BattleGrid battleGrid) {
+        for (Position occupiedPostions : battleGrid.getOccupiedPositions()){
+            if(position.getXcord() == occupiedPostions.getXcord() && position.getYCord() == occupiedPostions.getYCord()){
+                position.setHit(true);
+                return true;
+
+            }
+        }
+
+        return false;
+    }
+
+
 }
