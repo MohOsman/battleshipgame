@@ -5,6 +5,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import com.battleshipgame.model.ship.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,28 +20,29 @@ public class ShipSelection extends VBox {
      */
     private GameEventListener gameEventListener;
     /**
-     *Ship the will hold refrence to selectedShip
+     * Ship the will hold refrence to selectedShip
      */
     private Ship selectedShip;
+
+    private List<Ship> selectedships;
 
 
     /**
      * a constructor  to Initialize the objects and to create the Vbox element that represents a ship
-     *
      */
     public ShipSelection(List<Ship> ships, GameEventListener gameEventListener) {
+        this.selectedships = new ArrayList<>();
         this.gameEventListener = gameEventListener;
         addShipsquare(ships);
     }
 
 
-
-
     /**
      * this Method creates a vBox that represents ship so for each ship in ships we create a vbox that holds ship name and shipviwe(Hbox of squares)
+     *
      * @param ships
      */
-    private void addShipsquare(List<Ship> ships){
+    private void addShipsquare(List<Ship> ships) {
         // vbox's  for each ship
         VBox carrier = new VBox();
         VBox battleship = new VBox();
@@ -56,30 +58,35 @@ public class ShipSelection extends VBox {
                     carrier.setUserData(ship);
                     //  when user clicks the ship set the selectedship to user data (ship selected)
                     carrier.setOnMouseClicked(event -> setSelectedShip(carrier.getUserData()));
+                    this.selectedships.add(ship);
                     break;
                 case BattleShip.SHIP_NAME:
                     battleship.getChildren().addAll(new Label(BattleShip.SHIP_NAME), createShipSquare(BattleShip.SHIP_SIZE));
                     battleship.setUserData(ship);
                     battleship.setOnMouseClicked(event ->
                             setSelectedShip(battleship.getUserData()));
+                    this.selectedships.add(ship);
                     break;
                 case Destroyer.SHIP_NAME:
                     destroyer.getChildren().addAll(new Label(Destroyer.SHIP_NAME), createShipSquare(Destroyer.SHIP_SIZE));
                     destroyer.setUserData(ship);
                     destroyer.setOnMouseClicked(event ->
                             setSelectedShip(destroyer.getUserData()));
+                    this.selectedships.add(ship);
                     break;
                 case Submarine.SHIP_NAME:
                     submarine.getChildren().addAll(new Label(Submarine.SHIP_NAME), createShipSquare(Submarine.SHIP_SIZE));
                     submarine.setUserData(ship);
                     submarine.setOnMouseClicked(event ->
                             setSelectedShip(submarine.getUserData()));
+                    this.selectedships.add(ship);
                     break;
                 case Cruiser.SHIP_NAME:
                     cruser.getChildren().addAll(new Label(Cruiser.SHIP_NAME), createShipSquare(Cruiser.SHIP_SIZE));
                     cruser.setUserData(ship);
                     cruser.setOnMouseClicked(event ->
                             setSelectedShip(cruser.getUserData()));
+                    this.selectedships.add(ship);
             }
         }
         // add the ships to Selectionview <
@@ -89,6 +96,7 @@ public class ShipSelection extends VBox {
 
     /**
      * This method creates an hBox with bunch of squares to represent a ship
+     *
      * @param size The ship size for the amount of square
      * @return Hbox with squares
      */
@@ -104,28 +112,23 @@ public class ShipSelection extends VBox {
         return hBox;
     }
 
-    private void setSelectedShip(Object ship) {
-        this.selectedShip = (Ship) ship;  // since vbox.getuserdata returns object we have to cast it ship
-    }
-
-    public Ship getSelectedShip() {
-        return selectedShip;
-    }
 
     /**
      * This method removes ship after it had been selected so that user can not choose agin the same ship
+     *
      * @param ship The ship to remove
      */
     public void remove(Ship ship) {
-        if(ship!= null){
+        if (ship != null) {
             // for each children nodes  since this class holds only vboxe nodes that represent a ship
-            for (int i =0; i< getChildren().size(); i++){
+            for (int i = 0; i < getChildren().size(); i++) {
                 // we create a vbox for each node
-                VBox vBox =  (VBox)getChildren().get(i);
+                VBox vBox = (VBox) getChildren().get(i);
                 // we get the user data of the vbox and compare it wth given ship
-                if(vBox.getUserData().equals(ship)){
+                if (vBox.getUserData().equals(ship)) {
                     vBox.setVisible(false);
                     setSelectedShip(null);
+                    this.selectedships.remove(ship);
                 }
 
             }
@@ -137,4 +140,20 @@ public class ShipSelection extends VBox {
     public GameEventListener getGameEventListener() {
         return gameEventListener;
     }
+
+    private void setSelectedShip(Object ship) {
+        this.selectedShip = (Ship) ship;  // since vbox.getuserdata returns object we have to cast it ship
+    }
+
+    public Ship getSelectedShip() {
+        return selectedShip;
+    }
+
+    public List<Ship> getSelectedships() {
+        return selectedships;
+    }
 }
+
+
+
+

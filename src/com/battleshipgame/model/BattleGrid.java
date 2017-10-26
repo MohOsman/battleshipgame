@@ -3,6 +3,7 @@ import com.battleshipgame.model.ship.Ship;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,9 +22,7 @@ public class BattleGrid {
      */
     private List<Position> hitPostions;
     private List<Position> gridPositions;
-    private Position hitPostion;
     private List<Position> occupiedPositions;
-    private Status status;
     private static final int GRID_Y = 10;
     private static final int GRID_X = 10;
 
@@ -35,22 +34,9 @@ public class BattleGrid {
 
 
 
-    public void setHitPostion(Position hitPostion) {
-        this.hitPostion = hitPostion;
-    }
-
-    public Position getHitPostion() {
-        return hitPostion;
-    }
 
 
-    // delete later no use
-    public enum Status {
-        PLACEBLE,
-        RISKCOLLISON,
-        ENDPOINT
 
-    }
 
     /**
      *  constructor  to Initialize the objects and to create the Field
@@ -59,7 +45,7 @@ public class BattleGrid {
     public BattleGrid() {
         // list the keeps track of postions
         this.gridPositions = new ArrayList<>();
-        this.occupiedPositions = new ArrayList<>();
+        this.occupiedPositions = new LinkedList<>();
         this.hitPostions = new ArrayList<>();
         createBattleField();
 
@@ -110,11 +96,12 @@ public class BattleGrid {
                 // the postions that ship will reserv is  received postion + ship size
                 for (int i = position.getXcord(); i < position.getXcord() + ship.getSize(); i++) {
                     // we map the received position with the grid positions corrd
-                    Position p = getPostion(i,position.getYCord());
+                    Position p = getPostion(i, position.getYCord());
                     // set the postion flag to occupied
                     p.setOccupied(true);
                     // add the positions to occupiedpostion lised
                     this.occupiedPositions.add(p);
+                    ship.getShipPostions().add(p);
                 }
                 break;
 
@@ -124,11 +111,13 @@ public class BattleGrid {
                     Position p = getPostion(position.getXcord(), i);
                     p.setOccupied(true);
                     this.occupiedPositions.add(p);
+                    ship.getShipPostions().add(p);
                 }
-                break;
+                    break;
+
+
 
         }
-
     }
 
     /**
@@ -153,14 +142,12 @@ public class BattleGrid {
             case Ship.SHIP_VERTICAL:
                 for (int i = position.getYCord(); i < position.getYCord() + ship.getSize(); i++) {
                     Position p = getPostion(position.getXcord(),i);
-
-
                     if (ValidatePosition(p)) return false;
                 }
                 break;
         }
 
-        status= Status.PLACEBLE;
+
 
         return true;
     }
@@ -180,7 +167,6 @@ public class BattleGrid {
 
         // chceck postion p is not inside the gird boundaries
         if (!insideTheGrid(p)) {
-            this.status= Status.ENDPOINT;
             return true;
         }
         // if the postiion p is in the occupied positions
@@ -190,7 +176,6 @@ public class BattleGrid {
         }
         // if the postion p overlapp
         if (hasOverLap(p)) {
-            status = Status.RISKCOLLISON;
             return true;
         }
         return false;
@@ -299,11 +284,6 @@ public class BattleGrid {
         return occupiedPositions;
     }
 
-
-    // delete
-    public Status getStatus() {
-        return this.status;
-    }
 
 
 

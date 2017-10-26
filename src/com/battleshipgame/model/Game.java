@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by MohamedOsman on 2017-10-19.
  */
-public class Game  implements  Subject{
+public class Game {
     private List<Player> players;
     private State state;
     private List<Observer> observers;
@@ -19,13 +19,14 @@ public class Game  implements  Subject{
         this.players = new ArrayList<>();
         this.observers = new ArrayList<>();
         this.state = State.SETUPMODE;
-        createTestPlayers();
-        notifyAllObservers();
+        System.out.println(state);
+        createPlayers();
+        actOnState();
 
     }
 
 
-    private void createTestPlayers()  {
+    private void createPlayers() {
         PlayerFactory playerFactory = new PlayerFactory();
         this.players.add(playerFactory.createPlayer(PlayerType.AIPLAYER));
         this.players.add(playerFactory.createPlayer(PlayerType.USERPLAYER));
@@ -33,12 +34,16 @@ public class Game  implements  Subject{
 
     }
 
-    public  void actOnState(){
-        if(getState()==State.SETUPMODE){
-            notifyAllObservers();
+    public void actOnState() {
+        if (getState() == State.SETUPMODE) {
+            AIPlaceships();
         }
-       else if(getState()==State.PLAYMODE){
-            notifyAllObservers();
+    }
+
+
+    private void AIPlaceships() {
+        for (int i = 0; i <= 5; i++) {
+            getAIPlayer().placeShip();
         }
     }
 
@@ -70,51 +75,15 @@ public class Game  implements  Subject{
     }
 
 
-    public boolean userAttack(Position position) {
-        return getUserPlayer().attack(position, getAIPlayer().getBattleGrid());
-    }
-
-    public void updateGrid(Player player) {
-        if (player.getType() == PlayerType.USERPLAYER) {
-            addHitpostions(getAIPlayer());
-        }
-        if (player.getType() == PlayerType.AIPLAYER) {
-            addHitpostions(getUserPlayer());
-
-
-        }
-    }
-
-    private void addHitpostions(Player player) {
-        for(Position position : player.getBattleGrid().getOccupiedPositions()){
-            if(position.isHit()){
-                player.getBattleGrid().setHitPostion(position);
-            }
-        }
+    public void userAttack(Position position) {
+        getUserPlayer().attack(position, getAIPlayer());
     }
 
 
-    @Override
-    public void addObserver(Observer o) {
-        this.observers.add(o);
 
-
-    }
-
-    @Override
-    public void removeObserver(Observer o) {
-       this.observers.remove(o);
-    }
-
-    @Override
-    public void notifyAllObservers(){
-        for (Observer o : this.observers){
-            o.update();
-        }
+    public Position AIAttack() {
+        return getAIPlayer().attack(getUserPlayer().getBattleGrid(), getUserPlayer());
 
     }
 
-    public void startGame() {
-        actOnState();
-    }
 }

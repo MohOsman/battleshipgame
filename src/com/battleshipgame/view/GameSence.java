@@ -3,13 +3,10 @@ package com.battleshipgame.view;
 import com.battleshipgame.model.Game;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -21,7 +18,9 @@ public class GameSence extends  BorderPane {
    private BattleGridView userBattleGridView;
    private BattleGridView AIPlayerBattleGridview;
    private ShipSelection shipSelection;
-   private  Button startButton;
+   private Button startButton;
+   private  Button setupButton;
+   private Alert alert;
 
     public GameSence() {
 
@@ -31,7 +30,7 @@ public class GameSence extends  BorderPane {
     public  void  createGameWindow(Game game , GameEventListener gameEventListener) {
         initializeGrid(game, gameEventListener);
         createSelectionShips(game, gameEventListener);
-        createStartButton(gameEventListener);
+        createControls(gameEventListener);
         hideElements();
 
         }
@@ -54,24 +53,39 @@ public class GameSence extends  BorderPane {
 
     }
 
-    public  void createStartButton(GameEventListener gameEventListener){
+    public  void createControls(GameEventListener gameEventListener){
 
-        startButton = new Button("Start");
-        startButton.setPrefSize(60,30);
-        startButton.setOnAction(event -> {
+        setupButton = new Button("SetUp");
+        setupButton.setPrefSize(60,30);
+        setupButton.setOnAction(event -> {
            showElements();
          getAIPlayerBattleGridview().disableGrid();
            hideButton();
 
         });
-        setMargin(startButton, new Insets(20,30,300,300));
-        setBottom(startButton);
+
+        startButton = new Button("Start");
+        startButton.setPrefSize(60,30);
+        startButton.setOnAction(event -> {
+                    if (getShipSelection().getSelectedships().size() == 0) {
+                        getAIPlayerBattleGridview().enableGrid();
+                        getUserBattleGridView().disableGrid();
+                    }
+                }
+
+        );
+
+        setMargin(setupButton, new Insets(20,30,300,400));
+        HBox hBox = new HBox(50,setupButton,startButton);
+        setMargin(hBox, new Insets(20,30,300,300));
+        setBottom(hBox);
     }
 
     public  void hideElements(){
         getAIPlayerBattleGridview().setVisible(false);
         getUserBattleGridView().setVisible(false);
         getShipSelection().setVisible(false);
+        startButton.setDisable(true);
 
     }
 
@@ -79,6 +93,7 @@ public class GameSence extends  BorderPane {
         getAIPlayerBattleGridview().setVisible(true);
         getUserBattleGridView().setVisible(true);
         getShipSelection().setVisible(true);
+        startButton.setDisable(false);
 
     }
 
@@ -101,7 +116,7 @@ public class GameSence extends  BorderPane {
 
 
     public void hideButton() {
-        startButton.setDisable(true);
+        setupButton.setDisable(true);
 
 
 

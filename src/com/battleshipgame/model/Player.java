@@ -42,7 +42,6 @@ public  abstract class Player {
 
 
     public void setBattleGrid(BattleGrid battleGrid) {
-
         this.battleGrid = battleGrid;
     }
 
@@ -56,6 +55,11 @@ public  abstract class Player {
 
     public List<Ship> getUnplacedShips() {
         return unplacedShips;
+    }
+
+
+    protected boolean comparePositions(Position positionA, Position positionB) {
+        return positionA.getXcord() == positionB.getXcord() && positionA.getYCord() == positionB.getYCord();
     }
 
 
@@ -76,15 +80,16 @@ public  abstract class Player {
     public abstract void placeShip();
 
 
-    public int getDirection(List<Ship> ships) {
-        for (Ship s : ships)
-            return s.getDirection();
-        return -1;
+
+    public abstract void attack(Position position, Player player);
 
 
+    public abstract boolean allShipsSunked();
+
+    public void addShip(Ship ship) {
+        if (!this.placedShips.contains(ship))
+            this.placedShips.add(ship);
     }
 
-    public abstract Boolean hit(Position position);
-
-    public abstract boolean attack(Position position, BattleGrid battleGrid);
+    public abstract Position attack(BattleGrid battleGrid, Player userPlayer);
 }

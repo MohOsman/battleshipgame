@@ -8,17 +8,15 @@ public class UserPlayer extends Player {
     private static BattleGrid battleGrid = new BattleGrid();
 
     public UserPlayer() {
-        super(PlayerType.USERPLAYER,battleGrid) ;
+        super(PlayerType.USERPLAYER, battleGrid);
 
     }
 
 
-
-
     @Override
     public boolean placeShip(Ship shipSelected, Position position, int shipdirection) {
-        if(getBattleGrid().postionShipsOnGrid(shipSelected,position,shipdirection)){
-            getPlacedShips().add(shipSelected);
+        if (getBattleGrid().postionShipsOnGrid(shipSelected, position, shipdirection)) {
+            addShip(shipSelected);
             return true;
         }
         return false;
@@ -31,23 +29,41 @@ public class UserPlayer extends Player {
         // not used
     }
 
-    @Override
-    public Boolean hit(Position position) {
-        return null;
-    }
 
     @Override
-    public boolean attack(Position position, BattleGrid battleGrid) {
-        for (Position occupiedPostions : battleGrid.getOccupiedPositions()){
-            if(position.getXcord() == occupiedPostions.getXcord() && position.getYCord() == occupiedPostions.getYCord()){
+    public void attack(Position position, Player player) {
+        for (Position occupiedPostion : player.getBattleGrid().getOccupiedPositions()) {
+            if (comparePositions(position, occupiedPostion)) {
                 position.setHit(true);
-                return true;
+               uppdateShiphits(position,player);
+
 
             }
         }
 
-        return false;
+
     }
+
+
+
+    private void uppdateShiphits(Position position, Player player) {
+        player.getPlacedShips().forEach(ship -> {
+            if(ship.getShipPostions().contains(position)){
+                ship.setHit();
+
+            }
+        });
+
+        }
+
+    @Override
+    public boolean allShipsSunked() {
+      return  getPlacedShips().stream().allMatch(Ship::isSunk);
+    }
+
+    @Override
+    public Position attack(BattleGrid battleGrid, Player userPlayer) {
+        return null;}
 
 
 }

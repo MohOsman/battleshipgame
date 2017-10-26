@@ -15,7 +15,6 @@ public class Main extends Application {
         GameEventListener gameEventListener = new GameEventListener(gameView,game);
         GameController gameController = new GameController(game,gameView,gameEventListener);
         gameView.setGameController(gameController);
-        game.addObserver(gameView);
         gameController.playGame(game,gameView,gameEventListener);
 
     }

@@ -1,9 +1,8 @@
 package com.battleshipgame.model.ship;
 
 
+import com.battleshipgame.model.Observer;
 import com.battleshipgame.model.Position;
-
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +23,7 @@ public abstract class Ship  {
         this.shipPostions = new LinkedList<>();
         this.type = type;
         this.size = size;
+        this.hit =0;
     }
 
     public int getSize() {
@@ -42,17 +42,43 @@ public abstract class Ship  {
         this.type = type;
     }
 
-    public int getHit() {
+    public int getHits() {
         return hit;
     }
 
-    public void setHit(int hit) {
-        this.hit = hit;
+    public void setHit() {
+      hit++;
+
     }
 
-    public boolean isSunk() {
-        return sunk;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ship ship = (Ship) o;
+
+        if (size != ship.size) return false;
+        if (hit != ship.hit) return false;
+        if (sunk != ship.sunk) return false;
+        if (direction != ship.direction) return false;
+        if (type != null ? !type.equals(ship.type) : ship.type != null) return false;
+        return shipPostions != null ? shipPostions.equals(ship.shipPostions) : ship.shipPostions == null;
     }
+
+    @Override
+    public int hashCode() {
+        int result = size;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + hit;
+        result = 31 * result + (sunk ? 1 : 0);
+        result = 31 * result + (shipPostions != null ? shipPostions.hashCode() : 0);
+        result = 31 * result + direction;
+        return result;
+    }
+
+    public abstract boolean isSunk();
+
 
     public void setSunk(boolean sunk) {
         this.sunk = sunk;
@@ -63,16 +89,13 @@ public abstract class Ship  {
         return shipPostions;
     }
 
-    public void setPostions(List<Position> position) {
-        for (Position pos : position){
-            shipPostions.add(pos);
-        }
 
 
 
 
 
-    }
+
+
 
     public void setDirection(int direction) {
         this.direction = direction;

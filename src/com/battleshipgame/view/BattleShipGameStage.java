@@ -8,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public class BattleShipGameStage extends Stage implements Observer {
+public class BattleShipGameStage extends Stage{
     private Stage stage;
     private Game game;
     private GameSence gameScene;
@@ -54,17 +54,6 @@ public class BattleShipGameStage extends Stage implements Observer {
     }
 
 
-    @Override
-    public void update() {
-
-        if(getGameController().getGameState() == State.PLAYMODE){
-            System.out.println("update");
-           getGameScene().getUserBattleGridView().disableGrid();
-           getGameScene().getAIPlayerBattleGridview().enableGrid();
-           getGameScene().getAIPlayerBattleGridview().uppdateSingelSquare(game.getAIPlayer().getBattleGrid().getHitPostion());
-
-           }
-        }
 
 
 }

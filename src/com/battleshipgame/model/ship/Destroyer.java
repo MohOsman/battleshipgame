@@ -11,4 +11,9 @@ public class Destroyer extends  Ship {
     public Destroyer() {
         super(SHIP_NAME, SHIP_SIZE);
     }
+
+    @Override
+    public boolean isSunk() {
+        return this.getHits() >= SHIP_SIZE;
+    }
 }

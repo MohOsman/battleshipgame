@@ -98,20 +98,18 @@ public class BattleGridView extends GridPane{
     }
 
     public void uppdateSingelSquare(Position position) {
-         if(position != null){
-        Square square = getSquare(position.getXcord(), position.getYCord());
-            if (position.isHit()) {
+        Square square = getSquare(position.getXcord(),position.getYCord());
+        if (position.isHit()) {
                 square.setFill(Color.RED);
             } else
                 square.setFill(Color.BLACK);
         }
 
-        System.out.println("postion is null ");
-}
-
-
 
 }
+
+
+
 
 
 
