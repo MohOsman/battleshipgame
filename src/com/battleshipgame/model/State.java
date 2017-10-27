@@ -1,7 +1,8 @@
 package com.battleshipgame.model;
 
 /**
- * Created by MohamedOsman on 2017-10-24.
+ * state of the game enum
+ * @author MohamedOsman
  */
 public enum State {
     SETUPMODE,

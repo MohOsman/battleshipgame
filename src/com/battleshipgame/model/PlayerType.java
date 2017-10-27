@@ -1,7 +1,9 @@
 package com.battleshipgame.model;
 
+
 /**
- * Created by MohamedOsman on 2017-10-21.
+ * Player type Enum
+ * @author MohamedOsman
  */
 public enum PlayerType {
     AIPLAYER, USERPLAYER

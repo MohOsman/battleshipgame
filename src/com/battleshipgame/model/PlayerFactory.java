@@ -1,7 +1,8 @@
 package com.battleshipgame.model;
 
 /**
- * Created by MohamedOsman on 2017-10-22.
+ *   A Player Factory class to Initialize Players att game start
+ *   @author MohamedOsman
  */
 public class PlayerFactory {
 

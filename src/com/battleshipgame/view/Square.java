@@ -5,6 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ *  represents a Square extends javafx rectangle
+ *  @author MohamedOsman
+ */
 public class Square extends  Rectangle {
 
     private static final Color SQUARE_COLOR = Color.BLUE;

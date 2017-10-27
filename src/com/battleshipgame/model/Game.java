@@ -7,25 +7,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MohamedOsman on 2017-10-19.
+ * Game Class keep tracks of the game and creates players using Playerfactory
  */
 public class Game {
+    /**
+     * List of players  there can only two Players
+     */
     private List<Player> players;
+    /**
+     * state of the Game SETUPMODE :- players are placcing ships  PLAYMODE:- players are attacking eact other
+     */
     private State state;
-    private List<Observer> observers;
 
-
+    /**
+     *  Constructor the sets game state to setup state att begning
+     *  creates players using player factory
+     *  act by stat method to do tasks in specfic state
+     */
     public Game() {
         this.players = new ArrayList<>();
-        this.observers = new ArrayList<>();
         this.state = State.SETUPMODE;
-        System.out.println(state);
         createPlayers();
         actOnState();
 
     }
 
-
+    /**
+     *  Creating players by using player factory and adding those to a list
+     */
     private void createPlayers() {
         PlayerFactory playerFactory = new PlayerFactory();
         this.players.add(playerFactory.createPlayer(PlayerType.AIPLAYER));
@@ -34,6 +43,9 @@ public class Game {
 
     }
 
+    /**
+     * thes method acts by state, only thing we are doing here is to place AI ships
+     */
     public void actOnState() {
         if (getState() == State.SETUPMODE) {
             AIPlaceships();
@@ -41,6 +53,9 @@ public class Game {
     }
 
 
+    /**
+     * Private method to place AI ships using a for loop
+     */
     private void AIPlaceships() {
         for (int i = 0; i <= 5; i++) {
             getAIPlayer().placeShip();
@@ -75,12 +90,19 @@ public class Game {
     }
 
 
+    /**
+     * This method is game method to make the user player attack,this method is used in eventlistener,
+     * this method  calls userplayer to attack AIPlayer with the position clicked
+     * @param position To attack
+     */
     public void userAttack(Position position) {
         getUserPlayer().attack(position, getAIPlayer());
     }
 
-
-
+    /***
+     * this mehod calls the AIplayer to attack the user player gird  
+     * @return Postion that was attacked by the AI Player
+     */
     public Position AIAttack() {
         return getAIPlayer().attack(getUserPlayer().getBattleGrid(), getUserPlayer());
 

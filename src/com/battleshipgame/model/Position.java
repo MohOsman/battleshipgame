@@ -2,20 +2,28 @@ package com.battleshipgame.model;
 
 import java.util.Objects;
 
+/**
+ *  The position class contains both X and Y Values which represents Coordinates on grid
+ *  @author MohamedOsman
+ */
 
 public class Position {
 
     private int xCord;
     private int yCord;
+    /**
+     * returns true if is hit
+     */
     private  boolean isHit;
+    /**
+     * returns true if is occupied
+     */
     private boolean occupied;
 
 
     public Position(int xCord, int yCord) {
         this.xCord =xCord;
-        this.yCord = yCord;
-//        setYCord(yCord);
-//        setXCord(xCord);
+
     }
 
 
@@ -44,8 +52,6 @@ public class Position {
 
 
 
-
-
     @Override
     public String toString() {
         return "Position{" +
@@ -58,11 +64,8 @@ public class Position {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
         Position postion = (Position) o;
-        return xCord == postion.xCord &&
-                yCord == postion.yCord;
+        return xCord == postion.xCord && yCord == postion.yCord;
     }
 
     @Override
@@ -78,9 +81,6 @@ public class Position {
         isHit = hit;
     }
 
-    public boolean isOccupied() {
-        return occupied;
-    }
 
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;

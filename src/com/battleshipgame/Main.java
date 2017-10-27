@@ -1,5 +1,7 @@
 package com.battleshipgame;
 
+import com.battleshipgame.controller.GameController;
+import com.battleshipgame.controller.GameEventListener;
 import com.battleshipgame.model.Game;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -11,11 +13,11 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Game game = new Game();
-        BattleShipGameStage  gameView = new BattleShipGameStage(stage);
-        GameEventListener gameEventListener = new GameEventListener(gameView,game);
-        GameController gameController = new GameController(game,gameView,gameEventListener);
-        gameView.setGameController(gameController);
-        gameController.playGame(game,gameView,gameEventListener);
+        BattleShipGameStage  Stage = new BattleShipGameStage(stage);
+        GameEventListener gameEventListener = new GameEventListener(Stage,game);
+        GameController gameController = new GameController(game,Stage,gameEventListener);
+        Stage.setGameController(gameController);
+        gameController.playGame(game,Stage,gameEventListener);
 
     }
 

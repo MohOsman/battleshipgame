@@ -1,7 +1,7 @@
 package com.battleshipgame.model;
 import com.battleshipgame.model.ship.Ship;
 
-import javax.swing.*;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -175,10 +175,7 @@ public class BattleGrid {
             return true;
         }
         // if the postion p overlapp
-        if (hasOverLap(p)) {
-            return true;
-        }
-        return false;
+        return hasOverLap(p);
     }
 
     /**

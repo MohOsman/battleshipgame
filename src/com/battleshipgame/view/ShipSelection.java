@@ -1,5 +1,8 @@
 package com.battleshipgame.view;
+import com.battleshipgame.controller.GameEventListener;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -40,57 +43,87 @@ public class ShipSelection extends VBox {
     /**
      * this Method creates a vBox that represents ship so for each ship in ships we create a vbox that holds ship name and shipviwe(Hbox of squares)
      *
-     * @param ships
+     * @param  ships ,
      */
     private void addShipsquare(List<Ship> ships) {
         // vbox's  for each ship
-        VBox carrier = new VBox();
-        VBox battleship = new VBox();
-        VBox submarine = new VBox();
-        VBox destroyer = new VBox();
-        VBox cruser = new VBox();
+        VBox carrierVbox = new VBox();
+        VBox battleshipVbox = new VBox();
+        VBox submarineVbox = new VBox();
+        VBox destroyerVbox = new VBox();
+        VBox cruserVbox = new VBox();
+        Label carrierLabel = new Label();
+        Label battelshipLabel = new Label();
+        Label submarineLabel = new Label();
+        Label cruserLabel = new Label();
+        Label destroyerLabel = new Label();
+        setTextandColor(carrierLabel, battelshipLabel, submarineLabel, cruserLabel, destroyerLabel);
         for (Ship ship : ships) {
             switch (ship.getType()) {
                 case Carrier.SHIP_NAME:
-                    // add to the vbox new label with ship name, and hbox with amount of squares of the ship size for ex carrier  ship size 5 = 5 squares
-                    carrier.getChildren().addAll(new Label(Carrier.SHIP_NAME), createShipSquare(Carrier.SHIP_SIZE));
-                    // set the ship to  as user data, to later get the ship object
-                    carrier.setUserData(ship);
-                    //  when user clicks the ship set the selectedship to user data (ship selected)
-                    carrier.setOnMouseClicked(event -> setSelectedShip(carrier.getUserData()));
+                    // create vbox ship , Add the nodes  label and hbox with square to represent ship,
+                    // set on click event to act on user click ship is selected
+                    createShipVBox(carrierVbox, carrierLabel, ship, createShipSquare(Carrier.SHIP_SIZE), event ->
+                            setSelectedShip(carrierVbox.getUserData()));
+
                     this.selectedships.add(ship);
                     break;
                 case BattleShip.SHIP_NAME:
-                    battleship.getChildren().addAll(new Label(BattleShip.SHIP_NAME), createShipSquare(BattleShip.SHIP_SIZE));
-                    battleship.setUserData(ship);
-                    battleship.setOnMouseClicked(event ->
-                            setSelectedShip(battleship.getUserData()));
+                    createShipVBox(battleshipVbox, battelshipLabel, ship, createShipSquare(BattleShip.SHIP_SIZE), event ->
+                            setSelectedShip(battleshipVbox.getUserData()));
                     this.selectedships.add(ship);
                     break;
                 case Destroyer.SHIP_NAME:
-                    destroyer.getChildren().addAll(new Label(Destroyer.SHIP_NAME), createShipSquare(Destroyer.SHIP_SIZE));
-                    destroyer.setUserData(ship);
-                    destroyer.setOnMouseClicked(event ->
-                            setSelectedShip(destroyer.getUserData()));
+                    createShipVBox(destroyerVbox, destroyerLabel, ship, createShipSquare(Destroyer.SHIP_SIZE), event ->
+                            setSelectedShip(destroyerVbox.getUserData()));
                     this.selectedships.add(ship);
                     break;
                 case Submarine.SHIP_NAME:
-                    submarine.getChildren().addAll(new Label(Submarine.SHIP_NAME), createShipSquare(Submarine.SHIP_SIZE));
-                    submarine.setUserData(ship);
-                    submarine.setOnMouseClicked(event ->
-                            setSelectedShip(submarine.getUserData()));
+                    createShipVBox(submarineVbox, submarineLabel, ship, createShipSquare(Submarine.SHIP_SIZE), event ->
+                            setSelectedShip(submarineVbox.getUserData()));
                     this.selectedships.add(ship);
                     break;
                 case Cruiser.SHIP_NAME:
-                    cruser.getChildren().addAll(new Label(Cruiser.SHIP_NAME), createShipSquare(Cruiser.SHIP_SIZE));
-                    cruser.setUserData(ship);
-                    cruser.setOnMouseClicked(event ->
-                            setSelectedShip(cruser.getUserData()));
+                    createShipVBox(cruserVbox, cruserLabel, ship, createShipSquare(Cruiser.SHIP_SIZE), event ->
+                            setSelectedShip(cruserVbox.getUserData()));
                     this.selectedships.add(ship);
             }
         }
+
         // add the ships to Selectionview <
-        getChildren().addAll(carrier, battleship, cruser, submarine, destroyer);
+        getChildren().addAll(carrierVbox, battleshipVbox, cruserVbox, submarineVbox, destroyerVbox);
+
+    }
+
+    /***
+     * This method adds nodes to Vbox, the Nodes are Label and hbox withhbox with amount of squares of the ship size
+     * for ex carrierVBox  ship size 5 = 5 squares. IT also sets mouseeventhandler wh
+     * @param vBox  This holds the nodes label and hbox
+     * @param carrierLabel Label holds the Ship name
+     * @param ship  This is to make the Vbox represent a ship , by setting userData of vbox to ship objet
+     * @param shipSquare This is hbox which holds bucnch of squares
+     * @param mouseEventEventHandler  hanlder for click events on vbox
+     */
+    private void createShipVBox(VBox vBox, Label carrierLabel, Ship ship, HBox shipSquare, EventHandler<MouseEvent> mouseEventEventHandler) {
+        // add to the vbox new label with ship name, and hbox with amount of squares of the ship size for ex carrierVBox  ship size 5 = 5 squares
+        vBox.getChildren().addAll(carrierLabel, shipSquare);
+        // set the ship to  as user data, to later get the ship object
+        vBox.setUserData(ship);
+        //  when user clicks the ship set the selectedship to user data (ship selected)
+        vBox.setOnMouseClicked(mouseEventEventHandler);
+    }
+
+    private void setTextandColor(Label carrierLabel, Label battelshipLabel, Label submarineLabel, Label cruserLabel, Label destroyerLabel) {
+       battelshipLabel.setText(BattleShip.SHIP_NAME);
+       carrierLabel.setText(Carrier.SHIP_NAME);
+       submarineLabel.setText(Submarine.SHIP_NAME);
+       cruserLabel.setText(Cruiser.SHIP_NAME);
+       destroyerLabel.setText(Destroyer.SHIP_NAME);
+        battelshipLabel.setTextFill(Color.WHITE);
+        cruserLabel.setTextFill(Color.WHITE);
+        destroyerLabel.setTextFill(Color.WHITE);
+        carrierLabel.setTextFill(Color.WHITE);
+        submarineLabel.setTextFill(Color.WHITE);
 
     }
 
@@ -137,9 +170,7 @@ public class ShipSelection extends VBox {
 
     }
 
-    public GameEventListener getGameEventListener() {
-        return gameEventListener;
-    }
+
 
     private void setSelectedShip(Object ship) {
         this.selectedShip = (Ship) ship;  // since vbox.getuserdata returns object we have to cast it ship

@@ -1,21 +1,30 @@
 package com.battleshipgame.model.ship;
 
 
-import com.battleshipgame.model.Observer;
 import com.battleshipgame.model.Position;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Abstract class the represents ship objeect, this class keeps track of ships and size and postions
+ */
 public abstract class Ship  {
 
+    /**
+     * static final Ship directions
+     */
     public  static  final int SHIP_VERTICAL = 0;
     public  static  final int SHIP_HORIZONTAL=1;
+
 
     private int size;
     private String type ;
     private int hit;
     private boolean sunk;
+    /**
+     * ship postions on the grid
+     */
     private List<Position> shipPostions;
     private int direction;
 
@@ -46,6 +55,9 @@ public abstract class Ship  {
         return hit;
     }
 
+    /**
+     * every time this is called we incrase it each ship speratly if the hit == shipsize  the ship sinks
+     */
     public void setHit() {
       hit++;
 
@@ -77,6 +89,10 @@ public abstract class Ship  {
         return result;
     }
 
+    /**
+     * This method is implementd by all ships to keep track if the ship sunk or not
+     * @return
+     */
     public abstract boolean isSunk();
 
 
@@ -88,14 +104,6 @@ public abstract class Ship  {
     public List<Position> getShipPostions() {
         return shipPostions;
     }
-
-
-
-
-
-
-
-
 
     public void setDirection(int direction) {
         this.direction = direction;
